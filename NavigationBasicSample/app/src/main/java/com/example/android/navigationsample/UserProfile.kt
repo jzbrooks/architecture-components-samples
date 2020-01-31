@@ -17,17 +17,23 @@
 package com.example.android.navigationsample
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.navGraphViewModels
+import com.example.android.HotExitViewModel
 
 
 /**
  * Shows a profile screen for a user, taking the name from the arguments.
  */
 class UserProfile : Fragment() {
+
+    // It's odd that this viewmodel is cleared before the fragment is destroyed.
+    val viewModel by navGraphViewModels<HotExitViewModel>(R.id.nav_user_profile)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -37,6 +43,14 @@ class UserProfile : Fragment() {
 
         val name = arguments?.getString("userName") ?: "Ali Connors"
         view.findViewById<TextView>(R.id.profile_user_name).text = name
+
+        viewModel.log()
+
         return view
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("UserProfile", "onPause")
     }
 }
